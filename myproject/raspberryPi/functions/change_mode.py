@@ -24,6 +24,7 @@ def set_mode(master, mode = 'STABILIZE'):
     #    mavutil.mavlink.MAV_CMD_DO_SET_MODE, 0,
     #    0, mode_id, 0, 0, 0, 0, 0) or:
     # master.set_mode(mode_id) or:
+    
     master.mav.set_mode_send(
         master.target_system,
         mavutil.mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,

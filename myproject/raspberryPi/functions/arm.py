@@ -1,8 +1,5 @@
-"""
-Example of how to Arm and Disarm an Autopilot with pymavlink
-"""
-# Import mavutil
 from pymavlink import mavutil
+from read_cmd import handle_response
 
 def arm_copter(master):
     
@@ -18,7 +15,11 @@ def arm_copter(master):
         0,
         1, 0, 0, 0, 0, 0, 0)
 
+    handle_response(master)
+    
     # wait until arming confirmed (can manually check with master.motors_armed())
     print("Waiting for the vehicle to arm")
     master.motors_armed_wait()
     print('Armed!')
+    
+    return True
