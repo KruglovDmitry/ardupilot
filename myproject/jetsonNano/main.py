@@ -1,14 +1,14 @@
 import sys
 import time
 from pymavlink import mavutil
-
 sys.path.insert(1, r'/home/dima/Desktop/ArduPilot/ardupilot/myproject/functions')
 from connection import getPort
 from arm import arm_copter
 from change_mode import set_mode
 
 # Create the connection
-master = mavutil.mavlink_connection(getPort('raspberryPi'))
+baud_rate = 57600
+master = mavutil.mavlink_connection(getPort('jetsonNano'), baud = baud_rate, wait_ready=True, timeout=30)
 
 # Choose mode
 # 'GUIDED' - с отключением GPS в параметрах

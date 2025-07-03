@@ -1,15 +1,11 @@
 from dronekit import connect, VehicleMode, LocationGlobalRelative
-import gps
 import socket
 import time
 import sys
+from connection import getPort
+sys.path.insert(1, r'/home/dima/Desktop/ArduPilot/ardupilot/myproject/functions')
 
-#Start SITL if no connection string specified
-connection_string = 'udp:127.0.0.1:14551'
-print('Connecting to vehicle on: %s' % connection_string)
-vehicle = connect(connection_string, wait_ready=True, timeout=30)
-
-
+vehicle = connect( getPort('SITL'), wait_ready=True, timeout=30)
 
 def arm_and_takeoff(aTargetAltitude):
     """
