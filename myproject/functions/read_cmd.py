@@ -27,3 +27,17 @@ def handle_response(master):
             else:
                 print(msg)
                 break
+
+def get_ask(master, timeout=3):
+    
+    # Ожидание ответа
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        msg = master.recv_match(type='COMMAND_ACK', blocking=True, timeout=timeout)
+        if msg and msg.command == cmd:
+            print(f"ACK: {msg.result} ({(msg.result_param2)}")
+            return msg
+        time.sleep(0.1)
+    
+    print("Таймаут ожидания ACK")
+    return None

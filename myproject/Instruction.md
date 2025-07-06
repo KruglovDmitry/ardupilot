@@ -82,3 +82,8 @@
 		/ --out=udp:127.0.0.1:14551													# (проверяем что в строке подключения указан порт 14551)
 		/ --out=udp:0.0.0.0:14560													# (порт jmavsim)
 	- python <filename>.py															# Запускаем в другом терминале VS скрипт с кодом
+9. Запуск mavproxy: - mavproxy.py --master=/dev/ttyACM0 --baud=57600 --console
+	- param fetch          															# Загрузить все параметры
+	- param show           															# Показать все параметры
+	- param show SYSID_*   															# Фильтрация по маске
+	- param set PARAM_NAME VALUE													# Установка параметра
