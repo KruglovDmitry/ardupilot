@@ -1,61 +1,38 @@
-from dronekit import connect, VehicleMode, LocationGlobalRelative
-import socket
-import time
 import sys
+import math
+import time
+from pymavlink import mavutil
+sys.path.insert(1, r'/home/dima/ardupilot/myproject/functions')
+from set_params import subscribe_ask
+from read_cmd import get_ask, handle_response
 from connection import getPort
-sys.path.insert(1, r'/home/dima/Desktop/ArduPilot/ardupilot/myproject/functions')
+from arm import arm_copter
+from change_mode import set_mode
+from take_off import take_off_long, take_off_trottle, arm_and_takeoff_nogps, send_attitude_target, to_quaternion
 
-vehicle = connect( getPort('SITL'), wait_ready=True, timeout=30)
+# Create connection
+master = mavutil.mavlink_connection(getPort('SITL'), mavlink_version=2)
 
-def arm_and_takeoff(aTargetAltitude):
-    """
-    Arms vehicle and fly to aTargetAltitude.
-    """
+# Subscribe on ask commands
+subscribe_ask(master)
 
-    print("Basic pre-arm checks")
-    # Don't let the user try to arm until autopilot is ready
-    while not vehicle.is_armable:
-        print(" Waiting for vehicle to initialise...")
-        time.sleep(1)
+# Choose mode
+# 'GUIDED' - с отключением GPS в параметрах
+# 'GUIDED_NOGPS' - отсутствует в прошивке
+# 'FFLOWHOLD' - отсутствует в прошивке (ореинтация по оптическому потоку)
+# 'POSHOLD' - есть но не позволяет совершать ARM (ореинтация по маякам)
+# 'STABILIZE' - позволяет совершать ARM, который отключается через определенное время
+# 'ALT_HOLD' - при ARM вращает двигателями интенсивнее и не останавливает их, пока не поменять режим
+# 'ACRO' - ARM аналогично стабилизированному, но по факту нет стабилизации (акробатика)
+set_mode(master, 'STABILIZE')
 
-        
-    print("Arming motors")
-    # Copter should arm in GUIDED mode
-    vehicle.mode = VehicleMode("GUIDED")
-    vehicle.armed = True    
+# Arm
+armed = arm_copter(master)
 
-    while not vehicle.armed:      
-        print(" Waiting for arming...")
-        time.sleep(1)
+# Give the autopilot time to initialize
+time.sleep(2)  
 
-    print("Taking off!")
-    vehicle.simple_takeoff(aTargetAltitude) # Take off to target altitude
-
-    # Wait until the vehicle reaches a safe height before processing the goto (otherwise the command 
-    #  after Vehicle.simple_takeoff will execute immediately).
-    while True:
-        print(" Altitude: ", vehicle.location.global_relative_frame.alt)      
-        if vehicle.location.global_relative_frame.alt>=aTargetAltitude*0.95: #Trigger just below target alt.
-            print("Reached target altitude")
-            break
-        time.sleep(1)
-
-
-
-try:
-    # Arm and take off to altitude of 5 meters
-    arm_and_takeoff(5)
-
-    time.sleep(5)
-    # Landing
-    vehicle.mode = VehicleMode("LAND")
-
-            
-except Exception as e:
-    print(f"Error: {e}")
-    sys.exit(1)
-
-#Close vehicle object before exiting script
-print("Close vehicle object")
-vehicle.close()
-print("Completed")
+#Take Off
+if armed:
+    arm_and_takeoff_nogps(master, 1)
+    handle_response(master)

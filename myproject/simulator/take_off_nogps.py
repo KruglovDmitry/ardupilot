@@ -2,6 +2,9 @@ from dronekit import connect, VehicleMode, LocationGlobal, LocationGlobalRelativ
 from pymavlink import mavutil # Needed for command message definitions
 import time
 import math
+import sys
+sys.path.insert(1, r'/home/dima/ardupilot/myproject/functions')
+import connection
 
 # Set up option parsing to get connection string
 import argparse
@@ -10,7 +13,7 @@ parser.add_argument('--connect',
                    help="Vehicle connection target string. If not specified, SITL automatically started and used.")
 args = parser.parse_args()
 
-connection_string = args.connect
+connection_string = connection.getPort('SITL')
 sitl = None
 
 # Start SITL if no connection string specified
