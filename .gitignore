@@ -174,3 +174,4 @@ venv.bak/
 autotest_result_*_junit.xml
 .python-version
 *.mp4
+yolov5su.pt

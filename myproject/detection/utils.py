@@ -1,6 +1,5 @@
 import cv2
 import time
-import face_recognition
 
 def count_fps(prev_frame_time):
     current_frame_time = time.time()
@@ -9,6 +8,8 @@ def count_fps(prev_frame_time):
     return fps, prev_frame_time
 
 def detect_faces(frame):
+    import face_recognition
+    
     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
     rgb_small_frame = small_frame[:, :, ::-1]
     result = face_recognition.face_locations(rgb_small_frame)
