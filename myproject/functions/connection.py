@@ -9,7 +9,7 @@ def getPort(board):
     elif (board== 'jetsonNano'):
         port = '/dev/ttyTHS1'
     elif (board == "SITL"):
-        port = 'udp:127.0.0.1:14551'
+        port = "udp:127.0.0.1:14540" # Для jmavsim 'udp:127.0.0.1:14551'
     else:
         port = "Device not defound"
 

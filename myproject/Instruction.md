@@ -72,7 +72,7 @@
 	- sim_vehicle.py -v ArduCopter -f gazebo-iris --model JSON --map --console		# Запускаем симулятор с внешним портом
 		/ --out=udp:127.0.0.1:14551													# (проверяем что в строке подключения указан порт 14551)
 	- python <filename>.py															# Запускаем в другом терминале VS скрипт с кодом
-8. Запуск симуляции с jmavsim:
+8. Запуск симуляции с jmavsim (не движется дрон):
 	- cd /home/dima/ardupilot														# Переходим в папку репозитория ardupilot
 	- code .																		# Запускаем VS Code
 	- cd /home/dima/jMAVSim/out/production											# Переходим в папку репозитория jMAVSim/out/production
@@ -82,11 +82,14 @@
 		/ --out=udp:127.0.0.1:14551													# (проверяем что в строке подключения указан порт 14551)
 		/ --out=udp:0.0.0.0:14560													# (порт jmavsim)
 	- python <filename>.py															# Запускаем в другом терминале VS скрипт с кодом
-9. Запуск mavproxy: - mavproxy.py --master=/dev/ttyACM0 --baud=57600 --console
+9. Запуск симулятора под PX4: 
+	- cd ~/PX4-Autopilot 															# Переходим в папку репозитория px4
+	- make px4_sitl jmavsim															# Запускаем симуляцию jmavsim
+10. Запуск mavproxy: - mavproxy.py --master=/dev/ttyACM0 --baud=57600 --console
 	- param fetch          															# Загрузить все параметры
 	- param show           															# Показать все параметры
 	- param show SYSID_*   															# Фильтрация по маске
 	- param set PARAM_NAME VALUE													# Установка параметра
-10. Активация виртуального окружения для jetsonNano (python 3.8 и YOLO)
+11. Активация виртуального окружения для jetsonNano (python 3.8 и YOLO)
 	- cd /home/dima/Desktop/ArduPilot/ardupilot/myproject							# Переходим в каталог проекта 
 	- source ~/py38_env/bin/activate												# Активация (deactivate - деактивация)

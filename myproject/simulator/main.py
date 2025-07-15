@@ -11,7 +11,7 @@ from change_mode import set_mode
 from take_off import take_off_long, take_off_trottle, arm_and_takeoff_nogps, send_attitude_target, to_quaternion
 
 # Create connection
-master = mavutil.mavlink_connection(getPort('SITL'), mavlink_version=2)
+master = mavutil.mavlink_connection(getPort('SITL'))
 
 # Subscribe on ask commands
 subscribe_ask(master)
